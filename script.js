@@ -4,6 +4,7 @@ const addExpenseButton = document.getElementById('add-expense');
 const expenseList = document.getElementById('expense-list');
 const totalExpense = document.getElementById('total-expense');
 const expenseDate = document.getElementById('expense-date');
+const expenseCategory = document.getElementById('expense-category');
 
 
 let total = 0;
@@ -24,13 +25,14 @@ addExpenseButton.addEventListener('click', function() {
         return;
     }
 
-    
+    const categoryValue = expenseCategory.value;
 
     // Add expense to the list
     const expenseItem = document.createElement('li');
     expenseItem.innerHTML = `
         <span>${expenseName}</span>
         <span>${dateValue}</span>
+        <span>${categoryValue}</span>
         <span>$${expenseAmount.toFixed(2)}</span>
     `;
     expenseList.appendChild(expenseItem);
