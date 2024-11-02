@@ -7,7 +7,13 @@ const expenseDate = document.getElementById('expense-date');
 const expenseCategory = document.getElementById('expense-category');
 
 
+// Initialize an empty array to hold expenses or retrieve existing ones from LocalStorage
+let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
 let total = 0;
+
+function saveExpenses() {
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+}
 
 addExpenseButton.addEventListener('click', function() {
     // Get input values
@@ -27,6 +33,20 @@ addExpenseButton.addEventListener('click', function() {
 
     const categoryValue = expenseCategory.value;
 
+    //local storage code
+     // Create an expense object and add it to the array
+     const newExpense = {
+        name: expenseName,
+        amount: expenseAmount,
+        date: expenseDate
+    };
+    expenses.push(newExpense);
+
+     // Save to LocalStorage
+    saveExpenses();
+
+    
+
     // Add expense to the list
     const expenseItem = document.createElement('li');
     expenseItem.innerHTML = `
@@ -41,7 +61,21 @@ addExpenseButton.addEventListener('click', function() {
     total += expenseAmount;
     totalExpense.textContent = total.toFixed(2);
 
+    // Update the UI
+    expenseList(newExpense);
+    updateTotal(expenseAmount);
+
     // Clear input fields
     document.getElementById('expense-name').value = '';
     document.getElementById('expense-amount').value = '';
+    document.getElementById('expense-date').value = '';
+});
+
+     // Load expenses from LocalStorage when the page loads
+    window.addEventListener('load', () => {
+    expenses.forEach(expense => {
+        expenseList(expense);
+        total += expense.amount; // Sum up the saved expenses
+    });
+    document.getElementById('total-expense').textContent = total.toFixed(2);
 });
